@@ -21,3 +21,67 @@ export const AddDomainSchema = z.object({
       message: "Only JPG, JPEG & PNG are accepted file formats",
     }),
 });
+
+export type DomainSettingsProps = {
+  domain?: string;
+  image?: any;
+  welcomeMessage?: string;
+};
+
+export const DomainSettingsSchema = z
+  .object({
+    domain: z
+      .string()
+      .min(4, { message: "A domain must have atleast 3 characters" })
+      .refine(
+        (value) =>
+          /^((?!-)[A-Za-z0-9-]{1,63}(?<!-)\.)+[A-Za-z]{2,3}$/.test(value ?? ""),
+        "This is not a valid domain"
+      )
+      .optional()
+      .or(z.literal("").transform(() => undefined)),
+    image: z.any().optional(),
+    welcomeMessage: z
+      .string()
+      .min(6, "The message must be atleast 6 characters")
+      .optional()
+      .or(z.literal("").transform(() => undefined)),
+  })
+  .refine(
+    (schema) => {
+      if (schema.image?.length) {
+        if (
+          ACCEPTED_FILE_TYPES.includes(schema.image?.[0].type!) &&
+          schema.image?.[0].size <= MAX_UPLOAD_SIZE
+        ) {
+          return true;
+        }
+      }
+      if (!schema.image?.length) {
+        return true;
+      }
+    },
+    {
+      message:
+        "The fill must be less then 2MB, and on PNG, JPEG & JPG files are accepted",
+      path: ["image"],
+    }
+  );
+
+export type HelpDeskQuestionsProps = {
+  question: string;
+  answer: string;
+};
+
+export const HelpDeskQuestionsSchema = z.object({
+  question: z.string().min(1, { message: "Question cannot be left empty" }),
+  answer: z.string().min(1, { message: "Question cannot be left empty" }),
+});
+
+export type FilterQuestionsProps = {
+  question: string;
+};
+
+export const FilterQuestionsSchema = z.object({
+  question: z.string().min(1, { message: "Question cannot be left empty" }),
+});
