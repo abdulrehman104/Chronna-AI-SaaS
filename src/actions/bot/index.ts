@@ -1,11 +1,12 @@
 "use server";
 
-import client from "@/lib/client";
 import { extractEmailsFromString, extractURLfromString } from "@/lib/utils";
-import { onRealTimeChat } from "../conversation";
 import { clerkClient } from "@clerk/nextjs";
-import { onMailer } from "../mailer";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+
+import { onRealTimeChat } from "../conversation";
+import { onMailer } from "../mailer";
+import client from "@/lib/client";
 
 export const onGetCurrentChatBot = async (id: string) => {
   try {
@@ -57,6 +58,7 @@ export const onStoreConversations = async (
   });
 };
 
+// ====================== Chatbot Functionality with Gemini Model ======================
 const apiKey = process.env.GEMINI_API_KEY;
 const googleai = new GoogleGenerativeAI(apiKey);
 const model = googleai.getGenerativeModel({ model: "gemini-1.5-flash" });
@@ -316,7 +318,7 @@ export const onAiChatBotAssistant = async (
           parts: [
             {
               text: `
-          You are a highly knowledgeable and experienced sales representative for ${chatBotDomain?.name}. 
+          You are a highly knowledgeable and experienced sales representative for ${chatBotDomain?.name}.
           Your goal is to guide the customer naturally while gathering their email respectfully.`,
             },
           ],
