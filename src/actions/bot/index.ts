@@ -60,6 +60,7 @@ export const onStoreConversations = async (
 
 // ====================== Chatbot Functionality with Gemini Model ======================
 const apiKey = process.env.GEMINI_API_KEY;
+// @ts-ignore
 const googleai = new GoogleGenerativeAI(apiKey);
 const model = googleai.getGenerativeModel({ model: "gemini-1.5-flash" });
 
