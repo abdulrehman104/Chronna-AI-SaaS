@@ -12,6 +12,7 @@ export const BillingSettings = async () => {
   const planFeatures = pricingCards.find(
     (card) => card.title.toUpperCase() === plan?.toUpperCase()
   )?.features;
+  
   if (!planFeatures) return;
 
   console.log(planFeatures);
