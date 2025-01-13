@@ -134,8 +134,8 @@ export async function GET() {
 
     const accountLink = await stripe.accountLinks.create({
       account: account.id,
-      refresh_url: "http://localhost:3000/callback/stripe/refresh",
-      return_url: "http://localhost:3000/callback/stripe/success",
+      refresh_url: `${process.env.NEXT_PUBLIC_URL}/callback/stripe/refresh`,
+      return_url: `${process.env.NEXT_PUBLIC_URL}/callback/stripe/success`,
       type: "account_onboarding",
     });
 
